@@ -38,6 +38,7 @@ import IdeSidebar, { IDFile } from './components/IdeSidebar';
 import LayoutDesigner from './components/LayoutDesigner';
 import GradleManager from './components/GradleManager';
 import EmulatorModal from './components/EmulatorModal';
+import ProjectManager from './components/ProjectManager';
 
 // Utilities
 import { VisualElement, TEMPLATES } from './utils/androidXmlTemplates';
@@ -803,6 +804,20 @@ public class ${name.replace('.java', '')} {
               <Settings2 className="w-3.5 h-3.5 text-indigo-400" />
               <span>⚙️ Configurações do App (Manifest)</span>
             </button>
+
+            {/* Persistent Visual Project Manager dashboard button */}
+            <button
+              type="button"
+              onClick={() => setActiveFile('project_manager')}
+              className={`p-1.5 px-3 rounded border text-xs font-bold transition flex items-center space-x-1.5 ${
+                activeFile === 'project_manager'
+                  ? 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-[#3DDC84] border-emerald-550/30'
+                  : 'bg-slate-800/40 hover:bg-slate-800 text-slate-350 border-slate-750'
+              }`}
+            >
+              <Cpu className="w-3.5 h-3.5 text-[#3DDC84]" />
+              <span>📊 Gerenciador de Projeto</span>
+            </button>
           </div>
 
           {/* DYNAMIC COMPONENT PANEL CANVAS SWITCH */}
@@ -1104,10 +1119,35 @@ public class ${name.replace('.java', '')} {
               </div>
             )}
 
+            {/* E. ADVANCED INTEGRATED PROJECT STRUCTURE MANAGER */}
+            {activeFile === 'project_manager' && (
+              <ProjectManager
+                appName={appName}
+                setAppName={setAppName}
+                appPackage={appPackage}
+                setAppPackage={setAppPackage}
+                appVersion={appVersion}
+                setAppVersion={setAppVersion}
+                appIcon={appIcon}
+                setAppIcon={setAppIcon}
+                themeColor={themeColor}
+                setThemeColor={setThemeColor}
+                sdkConfig={sdkConfig}
+                setSdkConfig={setSdkConfig}
+                files={files}
+                setFiles={setFiles}
+                activeFile={activeFile}
+                setActiveFile={setActiveFile}
+                onAddLogcat={addLogcat}
+                triggerGradleSync={triggerGradleSync}
+              />
+            )}
+
             {/* D. GENERAL GENERIC CODE EDITOR PANEL */}
             {activeFile !== 'app/src/main/res/layout/activity_main.xml' && 
              activeFile !== 'app/build.gradle' && 
-             activeFile !== 'settings' && (
+             activeFile !== 'settings' && 
+             activeFile !== 'project_manager' && (
               <div className="flex-1 flex flex-col bg-slate-950 font-mono text-[11px] p-4 overflow-hidden relative">
                 
                 {/* Information badge ribbon */}

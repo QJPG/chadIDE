@@ -276,6 +276,20 @@ export default function IdeSidebar({
           <span>PROJECT: /home/android/sandbox</span>
         </div>
 
+        {/* Project Manager Sidebar Shortcut */}
+        <div
+          id="btn_project_manager_sidebar"
+          onClick={() => setActiveFile('project_manager')}
+          className={`flex items-center mx-3 px-2.5 py-1.5 rounded-lg cursor-pointer text-xs font-bold transition-all border select-none ${
+            activeFile === 'project_manager'
+              ? 'bg-[#2E3138] text-[#3DDC84] border-emerald-500/20'
+              : 'bg-slate-800/20 hover:bg-slate-800/40 text-slate-350 border-transparent'
+          }`}
+        >
+          <Settings2 className="w-3.5 h-3.5 text-[#3DDC84] mr-2 shrink-0 animate-pulse" />
+          <span>📊 Estrutura do Projeto</span>
+        </div>
+
         {/* Collapsible App Folder */}
         <div>
           {renderFolderHeader('app', 'app', 'pl-2')}
