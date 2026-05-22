@@ -39,6 +39,7 @@ import LayoutDesigner from './components/LayoutDesigner';
 import GradleManager from './components/GradleManager';
 import EmulatorModal from './components/EmulatorModal';
 import ProjectManager from './components/ProjectManager';
+import AndroidAppWrapper from './components/AndroidAppWrapper';
 
 // Utilities
 import { VisualElement, TEMPLATES } from './utils/androidXmlTemplates';
@@ -51,6 +52,7 @@ export default function App() {
   const [appPackage, setAppPackage] = useState('com.example.android.sandbox');
   const [appIcon, setAppIcon] = useState('android'); // 'android' | 'rocket' | 'heart' | 'cpu' | 'controller' | 'shield' | 'chat'
   const [themeColor, setThemeColor] = useState('#3DDC84'); // Emerald Green
+  const [isAndroidOSActive, setIsAndroidOSActive] = useState(true);
 
 
   // Layout XML Tree state
@@ -641,26 +643,41 @@ public class ${name.replace('.java', '')} {
     return file ? file.type : 'txt';
   };
 
-  return (
-    <div className="w-screen h-screen flex flex-col bg-[#1E2024] select-none overflow-hidden text-slate-300 font-sans">
-      
-      {/* 1. MASTER UPPER TOOLBAR INVENTIVE LAYOUT */}
-      <header className="h-14 bg-[#1A1C20] border-b border-[#2B2D30] flex items-center justify-between px-4 shrink-0 select-none shadow">
-        <div className="flex items-center space-x-3.5">
-          <div className="w-8 h-8 rounded-lg bg-[#3DDC84] flex items-center justify-center shadow-lg transition duration-300 transform hover:rotate-12">
-            <Bot className="w-5 h-5 text-slate-950 fill-current" />
-          </div>
-          <div>
-            <h1 className="text-xs font-bold uppercase tracking-wider text-slate-100 flex items-center space-x-2">
-              <span>Android Studio Web Sandbox</span>
-              <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 font-bold">APK COMPILE READY</span>
-            </h1>
-            <p className="text-[10px] text-slate-500 mt-0.2">IDE completa com editor Java/Kotlin, Designer XML visual e compilador nativo de pacotes APK</p>
-          </div>
-        </div>
+  const renderMainIdeBody = () => {
+    return (
+      <div className="w-full h-full flex flex-col bg-[#1E2024] select-none overflow-hidden text-slate-300 font-sans">
+        
+        {/* 1. MASTER UPPER TOOLBAR INVENTIVE LAYOUT */}
+        <header className="h-[54px] bg-[#1A1C20] border-b border-[#2B2D30] flex items-center justify-between px-4 shrink-0 select-none shadow">
+          <div className="flex items-center space-x-3.5">
+            <div className="w-8 h-8 rounded-lg bg-[#3DDC84] flex items-center justify-center shadow-lg transition duration-300 transform hover:rotate-12">
+              <Bot className="w-5 h-5 text-slate-950 fill-current" />
+            </div>
+            <div>
+              <h1 className="text-xs font-bold uppercase tracking-wider text-slate-100 flex items-center space-x-2">
+                <span>Android Studio Web Sandbox</span>
+                <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 font-bold">APK COMPILE READY</span>
+              </h1>
+              <p className="text-[10px] text-slate-500 mt-0.2">IDE completa com editor Java/Kotlin, Designer XML visual e compilador nativo de pacotes APK</p>
+            </div>
 
-        {/* Action controllers buttons */}
-        <div className="flex items-center space-x-4">
+            {/* Quick toggle for immersive Android Wrapper */}
+            <button
+              type="button"
+              id="toggle_android_wrapper_control"
+              onClick={() => setIsAndroidOSActive(!isAndroidOSActive)}
+              className={`ml-5 p-1 px-3.5 rounded-lg border text-[9.5px] font-black tracking-wider uppercase font-mono transition flex items-center space-x-1.5 cursor-pointer active:scale-95 ${
+                isAndroidOSActive
+                  ? 'bg-indigo-600 border-indigo-500/80 text-white shadow-md'
+                  : 'bg-slate-850 hover:bg-slate-800 text-slate-300 border-slate-700'
+              }`}
+            >
+              <span>{isAndroidOSActive ? '📱 Simulador Tablet Android : ATIVO' : '🖥️ Modo Tela Cheia'}</span>
+            </button>
+          </div>
+
+          {/* Action controllers buttons */}
+          <div className="flex items-center space-x-4">
           
           {/* Preset Visual models selector */}
           <div className="flex items-center space-x-1.5 bg-[#2B2D30]/60 p-1 px-2.5 bg-slate-900 rounded border border-slate-750 text-xs">
@@ -1275,6 +1292,31 @@ public class ${name.replace('.java', '')} {
 
         </div>
       </div>
+    </div>
+  );
+};
+
+  const ideContent = renderMainIdeBody();
+
+  return (
+    <>
+      {isAndroidOSActive ? (
+        <AndroidAppWrapper
+          appName={appName}
+          appPackage={appPackage}
+          appVersion={appVersion}
+          appIcon={appIcon}
+          themeColor={themeColor}
+          files={files}
+          onAddLogcat={addLogcat}
+        >
+          {ideContent}
+        </AndroidAppWrapper>
+      ) : (
+        <div className="w-screen h-screen flex flex-col bg-[#1E2024] select-none overflow-hidden text-slate-300 font-sans">
+          {ideContent}
+        </div>
+      )}
 
       {/* 4. REALTIME APP DAEMON EXECUTABLE SIMULATION DEVICE */}
       <EmulatorModal
@@ -1373,6 +1415,6 @@ public class ${name.replace('.java', '')} {
         </div>
       )}
 
-    </div>
+    </>
   );
 }
