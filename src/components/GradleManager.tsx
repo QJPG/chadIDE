@@ -573,7 +573,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
                     onChange={(e) => setSdkConfig({ ...sdkConfig, compileSdk: parseInt(e.target.value, 10) })}
                     className="w-full text-xs bg-slate-950 px-1.5 py-1 rounded border border-slate-800"
                   >
-                    {[34, 33, 31, 30, 29, 28].map((v) => (
+                    {[35, 34, 33, 32, 31, 30, 29, 28].map((v) => (
                       <option key={v} value={v}>API {v}</option>
                     ))}
                   </select>
@@ -587,7 +587,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
                     onChange={(e) => setSdkConfig({ ...sdkConfig, targetSdk: parseInt(e.target.value, 10) })}
                     className="w-full text-xs bg-slate-950 px-1.5 py-1 rounded border border-slate-800"
                   >
-                    {[34, 33, 31, 30].map((v) => (
+                    {[35, 34, 33, 32, 31, 30].map((v) => (
                       <option key={v} value={v}>API {v}</option>
                     ))}
                   </select>

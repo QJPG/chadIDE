@@ -353,7 +353,8 @@ export const DEFAULT_SDK_CONFIG: SdkVersionConfig = {
 };
 
 export const SDK_PLATFORMS = [
-  { apiLevel: 34, name: 'Android 14 (UpsideDownCake)', codename: 'VanillaIceCream', installed: true, status: 'Installed' },
+  { apiLevel: 35, name: 'Android 15 (VanillaIceCream)', codename: 'VanillaIceCream', installed: true, status: 'Installed' },
+  { apiLevel: 34, name: 'Android 14 (UpsideDownCake)', codename: 'UpsideDownCake', installed: true, status: 'Installed' },
   { apiLevel: 33, name: 'Android 13 (Tiramisu)', codename: 'Tiramisu', installed: true, status: 'Installed' },
   { apiLevel: 32, name: 'Android 12L (Sv2)', codename: 'SnowConev2', installed: false, status: 'Not Installed' },
   { apiLevel: 31, name: 'Android 12 (S)', codename: 'SnowCone', installed: false, status: 'Not Installed' },

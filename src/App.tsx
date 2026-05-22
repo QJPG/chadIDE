@@ -50,8 +50,7 @@ export default function App() {
   const [appPackage, setAppPackage] = useState('com.example.android.sandbox');
   const [appIcon, setAppIcon] = useState('android'); // 'android' | 'rocket' | 'heart' | 'cpu' | 'controller' | 'shield' | 'chat'
   const [themeColor, setThemeColor] = useState('#3DDC84'); // Emerald Green
-  const [minSdk, setMinSdk] = useState(24);
-  const [targetSdk, setTargetSdk] = useState(34);
+
 
   // Layout XML Tree state
   const [layoutTree, setLayoutTree] = useState<VisualElement>(TEMPLATES.blank.root);
@@ -212,6 +211,8 @@ sdk.dir=/home/developer/Android/Sdk
     setLogcatLogs((prev) => [...prev, `[${timestamp}] ${log}`]);
   };
 
+
+
   // --- 1. DYNAMIC STRING/MANIFEST/GRADLE SYNC LOOP ---
   useEffect(() => {
     // Generate active activity XML layout
@@ -296,12 +297,12 @@ ${clickHooks || '        // (Adicione botões, switches ou inputs na visualizaç
 
 android {
     namespace '${appPackage}'
-    compileSdk ${targetSdk}
+    compileSdk ${sdkConfig.compileSdk}
 
     defaultConfig {
         applicationId "${appPackage}"
-        minSdk ${minSdk}
-        targetSdk ${targetSdk}
+        minSdk ${sdkConfig.minSdk}
+        targetSdk ${sdkConfig.targetSdk}
         versionCode ${parseInt(appVersion.split('.')[0]) || 1}
         versionName "${appVersion}"
         
@@ -331,7 +332,7 @@ ${dependencies.map(d => `    ${d.config} '${d.group}:${d.artifact}:${d.version}'
     );
 
     setSyncRequired(true);
-  }, [appName, appVersion, appPackage, appIcon, themeColor, minSdk, targetSdk, dependencies, sdkConfig]);
+  }, [appName, appVersion, appPackage, appIcon, themeColor, dependencies, sdkConfig]);
 
   // Helper: Extract click handles from visual items to show realistic code output
   const generateWidgetKotlinHooks = (): string => {
@@ -488,7 +489,7 @@ public class ${name.replace('.java', '')} {
 
     setTimeout(() => {
       const logsToAdd = [
-        `[${timestamp()}] Baixando dependências transitivas compatíveis para compileSdk ${targetSdk}`,
+        `[${timestamp()}] Baixando dependências transitivas compatíveis para compileSdk ${sdkConfig.compileSdk}`,
         `[${timestamp()}] Resolvendo buildToolsVersion para o Gradle DSL compilador.`,
       ];
 
@@ -571,7 +572,7 @@ public class ${name.replace('.java', '')} {
 
   const handleDownloadApkFile = () => {
     // Generate actual downloadable apk text container modified with app settings!
-    const mockApkData = `Android Compiled Package Container\n=================================\nApplication Name: ${appName}\nApplication ID: ${appPackage}\nPackage Version: v${appVersion}\nAPI Sdk Level: ${targetSdk}\nLaunch Emblem Choice: [${appIcon}]\nPrimary Color: ${themeColor}\nCompilation Compiler: D8 Dex / R8 Minify Proguard\nSigning Crypt: SHA-256 self-signed Debug Key Certificate v3`;
+    const mockApkData = `Android Compiled Package Container\n=================================\nApplication Name: ${appName}\nApplication ID: ${appPackage}\nPackage Version: v${appVersion}\nAPI Sdk Level: ${sdkConfig.targetSdk}\nLaunch Emblem Choice: [${appIcon}]\nPrimary Color: ${themeColor}\nCompilation Compiler: D8 Dex / R8 Minify Proguard\nSigning Crypt: SHA-256 self-signed Debug Key Certificate v3`;
     const blob = new Blob([mockApkData], { type: 'application/vnd.android.package-archive' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1054,24 +1055,39 @@ public class ${name.replace('.java', '')} {
                     <div className="space-y-1">
                       <label className="text-[9px] uppercase font-bold text-slate-500">Min SDK Level Required</label>
                       <select
-                        value={minSdk}
-                        onChange={(e) => setMinSdk(parseInt(e.target.value))}
+                        value={sdkConfig.minSdk}
+                        onChange={(e) => {
+                          const newMin = parseInt(e.target.value);
+                          setSdkConfig(prev => ({ ...prev, minSdk: newMin }));
+                        }}
                         className="w-full px-2.5 py-1.8 bg-slate-950 border border-slate-750 text-xs text-slate-300 rounded-lg outline-none"
                       >
                         <option value={21}>Android 5.0 Lollipop (API 21)</option>
                         <option value={24}>Android 7.0 Nougat (API 24)</option>
                         <option value={26}>Android 8.0 Oreo (API 26)</option>
+                        <option value={28}>Android 9.0 Pie (API 28)</option>
                         <option value={29}>Android 10 (API 29)</option>
+                        <option value={30}>Android 11 (API 30)</option>
                       </select>
                     </div>
 
                     <div className="space-y-1">
                       <label className="text-[9px] uppercase font-bold text-slate-500">Target Framework SDK Level</label>
                       <select
-                        value={targetSdk}
-                        onChange={(e) => setTargetSdk(parseInt(e.target.value))}
+                        value={sdkConfig.targetSdk}
+                        onChange={(e) => {
+                          const newTarget = parseInt(e.target.value);
+                          setSdkConfig(prev => ({
+                            ...prev,
+                            targetSdk: newTarget,
+                            compileSdk: Math.max(prev.compileSdk, newTarget)
+                          }));
+                        }}
                         className="w-full px-2.5 py-1.8 bg-slate-950 border border-slate-750 text-xs text-slate-300 rounded-lg outline-none"
                       >
+                        <option value={30}>Android 11 R (API 30)</option>
+                        <option value={31}>Android 12 S (API 31)</option>
+                        <option value={32}>Android 12L Sv2 (API 32)</option>
                         <option value={33}>Android 13 Tiramisu (API 33)</option>
                         <option value={34}>Android 14 UpsideDown (API 34)</option>
                         <option value={35}>Android 15 VanillaIceCream (API 35)</option>
