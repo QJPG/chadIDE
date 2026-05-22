@@ -16,6 +16,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Debug Workspace Files
+        run: |
+          echo "=== CURRENT DIRECTORY ==="
+          pwd
+          echo "=== LISTING FILES IN ROOT ==="
+          ls -la
+          echo "=== LISTING src/ DIRECTORY ==="
+          ls -la src/ || echo "src/ directory not found!"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
