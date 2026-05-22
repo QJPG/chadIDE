@@ -1,0 +1,6 @@
+{
+  "name": "Android XML Designer & Gradle Manager",
+  "description": "A visual drag-and-drop designer for Android XML layouts with real-time XML generation, along with a comprehensive Gradle dependency management system for Android libraries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
